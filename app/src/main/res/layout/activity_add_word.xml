@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddWordActivity">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/wFrench"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="word in French" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/wDutch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="word in Dutch" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnAddWord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add word" />
+
+</LinearLayout>
