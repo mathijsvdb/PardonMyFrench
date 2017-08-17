@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Pardon My French</string>
+    <string name="auth_failed">authentication failed</string>
+    <string name="register_failed">registration failed, try again</string>
 </resources>
