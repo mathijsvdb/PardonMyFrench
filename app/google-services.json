@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "393627349084",
+    "firebase_url": "https://pardon-my-french-7f8a4.firebaseio.com",
+    "project_id": "pardon-my-french-7f8a4",
+    "storage_bucket": "pardon-my-french-7f8a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393627349084:android:d8565bcea42e0eaf",
+        "android_client_info": {
+          "package_name": "com.example.mathijs.pardonmyfrench"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393627349084-fvm06o1tqgjm99i968udufl8fevb6ech.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mathijs.pardonmyfrench",
+            "certificate_hash": "e51b21d1d4002f490390a0e0f8ef9b96f291b939"
+          }
+        },
+        {
+          "client_id": "393627349084-4oh8f5orui6c10fbb43s6tauqc4gdi0a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7EM-JGsnJ7itDpu7GtuOLT-m6EXQCemI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393627349084-4oh8f5orui6c10fbb43s6tauqc4gdi0a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
