@@ -40,7 +40,10 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
         String dutch = wDutch.getText().toString();
         String email = currentUser.getEmail();
 
-        Word word = new Word(french, dutch, email, 0);
+        Word word = new Word();
+        word.setBy(email);
+        word.setFrench(french);
+        word.setDutch(dutch);
 
         dbWords = FirebaseDatabase.getInstance().getReference("words");
         dbWords.child(french).setValue(word);
