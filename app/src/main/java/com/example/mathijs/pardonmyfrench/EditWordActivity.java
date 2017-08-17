@@ -9,5 +9,7 @@ public class EditWordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_word);
+
+        // TODO: make it so you can edit words.
     }
 }

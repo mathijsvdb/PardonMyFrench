@@ -1,5 +1,6 @@
 package com.example.mathijs.pardonmyfrench;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +20,6 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
     private EditText wDutch;
     private Button btnAddWord;
 
-    // TODO: get the current user
     private FirebaseUser currentUser;
     private DatabaseReference dbWords;
 
@@ -44,14 +44,14 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
         word.setBy(email);
         word.setFrench(french);
         word.setDutch(dutch);
+        word.setVotes(0);
 
         dbWords = FirebaseDatabase.getInstance().getReference("words");
         dbWords.child(french).setValue(word);
 
         Toast.makeText(this, "Word has been added.", Toast.LENGTH_SHORT).show();
 
-        // TODO: return to your words list.
-
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     @Override

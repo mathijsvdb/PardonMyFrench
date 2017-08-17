@@ -32,7 +32,8 @@
             android:label="Register" />
         <activity android:name=".AddWordActivity" />
         <activity android:name=".EditWordActivity" />
-        <activity android:name=".BaseActivity"></activity>
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".DetailActivity"></activity>
     </application>
 
 </manifest>

@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.example.mathijs.pardonmyfrench.Objects.Word;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,7 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnAddWord;
     private FirebaseDatabase database;
     private DatabaseReference tblWords;
-    private ArrayList<Word> wordList = new ArrayList<>();;
+    private ArrayList<Word> wordList = new ArrayList<>();
+    private FirebaseUser mUser;
 
     // recyclerview variables
     private RecyclerView mRecyclerView;
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnAddWord = (Button) findViewById(R.id.btnAddWord);
         btnAddWord.setOnClickListener(this);
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // database shizzle
         database = FirebaseDatabase.getInstance();
@@ -49,7 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Word word = new Word();
                 word.setFrench(dataSnapshot.child("french").getValue().toString());
                 word.setDutch(dataSnapshot.child("dutch").getValue().toString());
-                word.setBy("blakkie");
+                word.setBy(mUser.getEmail());
+                String votes = dataSnapshot.child("votes").getValue().toString();
+
+                word.setVotes(Integer.valueOf(votes));
                 wordList.add(word);
                 mAdapter.notifyDataSetChanged();
             }
@@ -75,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        // Recyclerview
+        // RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_words);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -96,6 +103,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Go to word detail page
         Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
 
+        // TODO: kan toch veel cleaner, nee?
+        intent.putExtra("word_french", word.getFrench());
+        intent.putExtra("word_dutch", word.getDutch());
+        intent.putExtra("word_by", word.getBy());
+        intent.putExtra("word_votes", String.valueOf(word.getVotes()));
 
+        startActivity(intent);
     }
 }
