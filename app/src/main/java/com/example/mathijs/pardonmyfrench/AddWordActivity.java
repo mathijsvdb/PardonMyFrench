@@ -3,6 +3,7 @@ package com.example.mathijs.pardonmyfrench;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_word);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         wFrench = (EditText) findViewById(R.id.wFrench);
         wDutch = (EditText) findViewById(R.id.wDutch);
@@ -52,6 +54,7 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
         Toast.makeText(this, "Word has been added.", Toast.LENGTH_SHORT).show();
 
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     @Override
@@ -59,5 +62,15 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
         if (view == btnAddWord) {
             addWord();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

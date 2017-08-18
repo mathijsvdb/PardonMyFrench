@@ -36,9 +36,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             // TODO: do something else!
             // go directly to overview
-            mAuth.signOut();
-
-            Toast.makeText(this, "logged out", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
 
         editEmail = (EditText) findViewById(R.id.editEmail);
