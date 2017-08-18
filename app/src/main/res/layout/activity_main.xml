@@ -7,13 +7,6 @@
     tools:context="com.example.mathijs.pardonmyfrench.MainActivity"
     android:orientation="vertical">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnAddWord"
-        android:text="Add word"
-        android:layout_margin="16dp" />
-
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
