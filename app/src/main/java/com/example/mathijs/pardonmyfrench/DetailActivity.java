@@ -8,18 +8,25 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mathijs.pardonmyfrench.Objects.Word;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView mFrench;
     private TextView mDutch;
     private TextView mBy;
     private TextView mVotes;
+    private Button btnVote;
 
     private Word mWord;
+
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,8 @@ public class DetailActivity extends AppCompatActivity {
         mDutch = (TextView) findViewById(R.id.tv_dutch);
         mBy = (TextView) findViewById(R.id.tv_by);
         mVotes = (TextView) findViewById(R.id.tv_votes);
+        btnVote = (Button) findViewById(R.id.btnVote);
+        btnVote.setOnClickListener(this);
 
         Intent intent = getIntent();
         if (intent.hasExtra("word")) {
@@ -85,5 +94,24 @@ public class DetailActivity extends AppCompatActivity {
                 .setType(mimeType)
                 .setText(textToShare)
                 .startChooser();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == btnVote) {
+            upvoteWord();
+        }
+    }
+
+    private void upvoteWord() {
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference tblWords = database.getReference("words");
+
+        Word updated = mWord;
+        updated.setVotes(mWord.getVotes() + 1);
+        tblWords.child(mWord.getFrench()).setValue(updated);
+        mVotes.setText(String.valueOf(updated.getVotes()));
+
+        Toast.makeText(this, "thanks for voting", Toast.LENGTH_SHORT).show();
     }
 }
