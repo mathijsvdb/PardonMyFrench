@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_share"
+        android:title="Edit word"
+        android:icon="@drawable/ic_share_black_24dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/menu_edit"
         android:title="Edit word"
         android:icon="@drawable/ic_edit_black_24dp"
