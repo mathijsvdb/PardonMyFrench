@@ -89,8 +89,6 @@ public class MainActivity extends BaseActivity implements WordAdapter.ListItemCl
     public void onListItemClick(Word word) {
         // Go to word detail page
         Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-
-        // TODO: kan toch veel cleaner, nee? Serialization
         intent.putExtra("word", word);
 
         startActivity(intent);
