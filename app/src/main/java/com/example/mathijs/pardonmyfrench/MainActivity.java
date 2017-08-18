@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity implements WordAdapter.ListItemCl
         mAdapter = new WordAdapter(wordList, this);
         mRecyclerView.setAdapter(mAdapter);
 
-        reference.addChildEventListener(new ChildEventListener() {
+        reference.orderByChild("french").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 wordList.add(dataSnapshot.getValue(Word.class));
