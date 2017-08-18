@@ -13,7 +13,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-//public class MainActivity extends BaseActivity implements WordAdapter.ListItemClickListener {
 public class MainActivity extends BaseActivity implements WordAdapter.ListItemClickListener {
     private ArrayList<Word> wordList;
     private RecyclerView mRecyclerView;
