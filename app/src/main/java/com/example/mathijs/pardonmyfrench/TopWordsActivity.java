@@ -44,7 +44,7 @@ public class TopWordsActivity extends AppCompatActivity implements WordAdapter.L
         mAdapter = new WordAdapter(wordList, this);
         mRecyclerView.setAdapter(mAdapter);
 
-        reference.limitToLast(200).orderByChild("votes").addChildEventListener(new ChildEventListener() {
+        reference.orderByChild("votes").limitToLast(200).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 wordList.add(dataSnapshot.getValue(Word.class));
