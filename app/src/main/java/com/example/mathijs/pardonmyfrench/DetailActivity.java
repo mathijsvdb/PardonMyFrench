@@ -3,7 +3,11 @@ package com.example.mathijs.pardonmyfrench;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetailActivity extends AppCompatActivity {
     private TextView mFrench;
@@ -11,11 +15,11 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mBy;
     private TextView mVotes;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mFrench = (TextView) findViewById(R.id.tv_french);
         mDutch = (TextView) findViewById(R.id.tv_dutch);
@@ -41,5 +45,29 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         // TODO: voting + editbtn & activity;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+
+        if (id == R.id.menu_edit) {
+            // send word data to activity
+            Toast.makeText(this, "WIP: Edit words", Toast.LENGTH_SHORT).show();
+
+//            startActivity(new Intent(this, EditWordActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
