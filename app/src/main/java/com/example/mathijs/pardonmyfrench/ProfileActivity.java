@@ -58,39 +58,35 @@ public class ProfileActivity extends AppCompatActivity implements WordAdapter.Li
         mRecyclerView.setAdapter(mAdapter);
 
         // Retrieve data and populate wordlist
-        reference.addChildEventListener(new ChildEventListener() {
+        reference.orderByChild("by").equalTo(mCurrentUser.getEmail()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 // add the words to the wordlist
                 Word word = dataSnapshot.getValue(Word.class);
 
                 // Only add the word to the list if it is added by the loggen in user
-                if (word.getBy().equals(mCurrentUser.getEmail())) {
-                    mWordList.add(word);
-                    mAdapter.notifyDataSetChanged();
-                }
+                mWordList.add(word);
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                // TODO: update verkeerde items
-//                Word word = dataSnapshot.getValue(Word.class);
-//
-//                int index = getItemIndex(word);
-//
-//                mWordList.set(index, word);
-//                mAdapter.notifyItemChanged(index);
+                Word word = dataSnapshot.getValue(Word.class);
+
+                int index = getItemIndex(word);
+
+                mWordList.set(index, word);
+                mAdapter.notifyItemChanged(index);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                // TODO: verwijdert verkeerde items
-//                Word word = dataSnapshot.getValue(Word.class);
-//
-//                int index = getItemIndex(word);
-//
-//                mWordList.remove(index);
-//                mAdapter.notifyItemRemoved(index);
+                Word word = dataSnapshot.getValue(Word.class);
+
+                int index = getItemIndex(word);
+
+                mWordList.remove(index);
+                mAdapter.notifyItemRemoved(index);
             }
 
             @Override
