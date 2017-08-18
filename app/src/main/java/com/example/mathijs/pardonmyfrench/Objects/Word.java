@@ -1,10 +1,9 @@
 package com.example.mathijs.pardonmyfrench.Objects;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Word implements Parcelable{
+public class Word implements Parcelable {
     private String french;
     private String dutch;
     private String by;

@@ -112,6 +112,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tblWords.child(mWord.getFrench()).setValue(updated);
         mVotes.setText(String.valueOf(updated.getVotes()));
 
+        // TODO: only allow 1 vote.
+
         Toast.makeText(this, "thanks for voting", Toast.LENGTH_SHORT).show();
     }
 }
