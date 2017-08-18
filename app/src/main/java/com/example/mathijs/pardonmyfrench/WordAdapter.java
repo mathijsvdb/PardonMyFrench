@@ -10,10 +10,9 @@ import com.example.mathijs.pardonmyfrench.Objects.Word;
 import java.util.ArrayList;
 
 public class WordAdapter extends RecyclerView.Adapter<WordAdapter.WordViewHolder> {
-    final private ListItemClickListener mOnClickListener;
-
     // de data die gaat gebruikt worden voor de recyclerview
     private ArrayList<Word> mWords;
+    final private ListItemClickListener mOnClickListener;
 
     public interface ListItemClickListener {
         void onListItemClick(Word word);
