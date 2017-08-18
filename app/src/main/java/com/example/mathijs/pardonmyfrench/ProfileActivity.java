@@ -22,16 +22,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity implements WordAdapter.ListItemClickListener {
+    // text to show on top
     private FirebaseUser mCurrentUser;
     private TextView mEmail;
 
     private FirebaseDatabase database;
-    private DatabaseReference tblWords;
+    private DatabaseReference reference;
 
-    private WordAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private WordAdapter mAdapter;
 
-    private ArrayList<Word> mWordList = new ArrayList<>();
+    private ArrayList<Word> mWordList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +40,35 @@ public class ProfileActivity extends AppCompatActivity implements WordAdapter.Li
         setContentView(R.layout.activity_profile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Display Profile Information TODO: Add to it.
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mEmail = (TextView) findViewById(R.id.tv_profile_email);
         mEmail.setText(mCurrentUser.getEmail());
 
-        // database
+        // Initate database variables
         database = FirebaseDatabase.getInstance();
-        tblWords = database.getReference("words");
-        tblWords.addChildEventListener(new ChildEventListener() {
+        reference = database.getReference("words");
+
+        // The wordlist
+        mWordList = new ArrayList<>();
+
+        // Set up the recyclerview
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv_words);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mAdapter = new WordAdapter(mWordList, this);
+        mRecyclerView.setAdapter(mAdapter);
+
+        // Retrieve data and populate wordlist
+        reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                // add the words to the wordlist
                 Word word = dataSnapshot.getValue(Word.class);
 
+                // Only add the word to the list if it is added by the loggen in user
                 if (word.getBy().equals(mCurrentUser.getEmail())) {
                     mWordList.add(word);
                     mAdapter.notifyDataSetChanged();
@@ -59,12 +77,24 @@ public class ProfileActivity extends AppCompatActivity implements WordAdapter.Li
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                // TODO: update verkeerde items
+//                Word word = dataSnapshot.getValue(Word.class);
+//
+//                int index = getItemIndex(word);
+//
+//                mWordList.set(index, word);
+//                mAdapter.notifyItemChanged(index);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                // TODO: verwijdert verkeerde items
+//                Word word = dataSnapshot.getValue(Word.class);
+//
+//                int index = getItemIndex(word);
+//
+//                mWordList.remove(index);
+//                mAdapter.notifyItemRemoved(index);
             }
 
             @Override
@@ -78,16 +108,19 @@ public class ProfileActivity extends AppCompatActivity implements WordAdapter.Li
             }
         });
 
-        // recycler view
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_words);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
+    }
 
-        mAdapter = new WordAdapter(mWordList, this);
+    private int getItemIndex(Word word) {
+        int index = 0;
 
-        mRecyclerView.setAdapter(mAdapter);
+        for (int i = 0; i < mWordList.size(); i++) {
+            if (mWordList.get(i).getFrench().equals(word.getFrench())) {
+                index = i;
+                break;
+            }
+        }
 
-
+        return index;
     }
 
     @Override
