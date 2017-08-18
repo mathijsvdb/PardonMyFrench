@@ -25,6 +25,9 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.menu_profile:
                 startActivity(new Intent(this, ProfileActivity.class));
                 return true;
+            case R.id.menu_top_words:
+                startActivity(new Intent(this, TopWordsActivity.class));
+                return true;
             case R.id.menu_logout:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this, LoginActivity.class));
