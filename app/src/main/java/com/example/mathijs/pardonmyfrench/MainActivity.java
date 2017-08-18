@@ -19,9 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, WordAdapter.ListItemClickListener{
-
-    private Button btnAddWord;
+public class MainActivity extends BaseActivity implements WordAdapter.ListItemClickListener{
     private FirebaseDatabase database;
     private DatabaseReference tblWords;
     private ArrayList<Word> wordList = new ArrayList<>();
@@ -35,9 +33,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        btnAddWord = (Button) findViewById(R.id.btnAddWord);
-        btnAddWord.setOnClickListener(this);
         mUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // database shizzle
@@ -89,13 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAdapter = new WordAdapter(wordList, this);
         mRecyclerView.setAdapter(mAdapter);
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (view == btnAddWord) {
-            startActivity(new Intent(getApplicationContext(), AddWordActivity.class));
-        }
     }
 
     @Override
