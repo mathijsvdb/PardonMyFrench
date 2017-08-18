@@ -42,7 +42,6 @@ public class MainActivity extends BaseActivity implements WordAdapter.ListItemCl
         tblWords.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.i("WOLLAG", "onChildAdded: " + dataSnapshot.child("french").getValue());
 
                 // add items to the array list wordList
                 Word word = new Word();
@@ -91,11 +90,8 @@ public class MainActivity extends BaseActivity implements WordAdapter.ListItemCl
         // Go to word detail page
         Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
 
-        // TODO: kan toch veel cleaner, nee?
-        intent.putExtra("word_french", word.getFrench());
-        intent.putExtra("word_dutch", word.getDutch());
-        intent.putExtra("word_by", word.getBy());
-        intent.putExtra("word_votes", String.valueOf(word.getVotes()));
+        // TODO: kan toch veel cleaner, nee? Serialization
+        intent.putExtra("word", word);
 
         startActivity(intent);
     }

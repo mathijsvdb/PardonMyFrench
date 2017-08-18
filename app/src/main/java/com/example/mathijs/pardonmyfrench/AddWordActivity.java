@@ -1,8 +1,15 @@
 package com.example.mathijs.pardonmyfrench;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -53,8 +60,43 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
 
         Toast.makeText(this, "Word has been added.", Toast.LENGTH_SHORT).show();
 
+        if (allowNotifations()) {
+            sendNotification(word);
+        }
+
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    private boolean allowNotifations() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean("allow_notifications", true);
+    }
+
+    private void sendNotification(Word word) {
+        Log.i("NOTIFICATION", "sendNotification: true");
+
+        // notification builder
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_add_black_24dp)
+                .setContentTitle("My notification")
+                .setContentText("Hello World");
+
+        Intent resultIntent = new Intent(this, DetailActivity.class);
+        resultIntent.putExtra("word", word);
+
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1, mBuilder.build());
     }
 
     @Override

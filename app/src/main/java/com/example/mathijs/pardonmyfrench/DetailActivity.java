@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,32 +32,16 @@ public class DetailActivity extends AppCompatActivity {
         mBy = (TextView) findViewById(R.id.tv_by);
         mVotes = (TextView) findViewById(R.id.tv_votes);
 
-        mWord = new Word();
-
         Intent intent = getIntent();
+        if (intent.hasExtra("word")) {
+            Word word = intent.getParcelableExtra("word");
 
-        if (intent.hasExtra("word_french")) {
-            String french = intent.getStringExtra("word_french");
-            mFrench.setText(french);
-            mWord.setFrench(french);
-        }
+            mFrench.setText(word.getFrench());
+            mDutch.setText(word.getDutch());
+            mBy.setText(word.getBy());
+            mVotes.setText(String.valueOf(word.getVotes()));
 
-        if (intent.hasExtra("word_dutch")) {
-            String dutch = intent.getStringExtra("word_dutch");
-            mDutch.setText(dutch);
-            mWord.setDutch(dutch);
-        }
-
-        if (intent.hasExtra("word_by")) {
-            String by = intent.getStringExtra("word_by");
-            mBy.setText(by);
-            mWord.setBy(by);
-        }
-
-        if (intent.hasExtra("word_votes")) {
-            String votes = intent.getStringExtra("word_votes");
-            mVotes.setText(votes);
-            mWord.setVotes(Integer.parseInt(intent.getStringExtra("word_votes")));
+            mWord = word;
         }
 
         // TODO: voting + editbtn & activity;
