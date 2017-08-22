@@ -113,6 +113,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         // TODO: only allow 1 vote.
 
-        Toast.makeText(this, "thanks for voting", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Thanks for voting", Toast.LENGTH_SHORT).show();
     }
 }
