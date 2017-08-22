@@ -19,8 +19,11 @@ import android.widget.Toast;
 import com.example.mathijs.pardonmyfrench.Objects.Word;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AddWordActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,6 +33,7 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
 
     private FirebaseUser currentUser;
     private DatabaseReference dbWords;
+    private Boolean exists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +60,52 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
         word.setVotes(0);
 
         dbWords = FirebaseDatabase.getInstance().getReference("words");
-        dbWords.child(french).setValue(word);
 
-        Toast.makeText(this, "Word has been added.", Toast.LENGTH_SHORT).show();
+        checkIfWordExists(french);
 
-        // TODO: add to child added on main activity?
-        if (allowNotifations()) {
-            sendNotification(word);
+        if (exists) {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Word already exists",
+                    Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            dbWords.child(french).setValue(word);
+
+            Toast.makeText(this, "Word has been added", Toast.LENGTH_SHORT).show();
+
+            // TODO: add to child added on main activity?
+            if (allowNotifations()) {
+                sendNotification(word);
+            }
+
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         }
 
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+    }
+
+    private void checkIfWordExists(String wordToCheck)
+    {
+        dbWords.child(wordToCheck).limitToFirst(1).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            wordExists();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+    }
+
+    private void wordExists() {
+        exists = true;
     }
 
     private boolean allowNotifations() {
@@ -80,8 +119,8 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
         // notification builder
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_add_black_24dp)
-                .setContentTitle("My notification")
-                .setContentText("Hello World");
+                .setContentTitle("New word added")
+                .setContentText("The word '" + word.getFrench() + "' was added.");
 
         Intent resultIntent = new Intent(this, DetailActivity.class);
         resultIntent.putExtra("word", word);
