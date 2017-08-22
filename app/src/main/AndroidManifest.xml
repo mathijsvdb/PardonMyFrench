@@ -9,14 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".BaseActivity" />
         <activity android:name=".MainActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -30,15 +24,22 @@
         <activity
             android:name=".RegisterActivity"
             android:label="Register" />
-        <activity android:name=".AddWordActivity" />
-        <activity android:name=".EditWordActivity" />
-        <activity android:name=".BaseActivity" />
+        <activity
+            android:name=".AddWordActivity"
+            android:label="Add word" />
+        <activity
+            android:name=".EditWordActivity"
+            android:label="Edit word" />
         <activity android:name=".DetailActivity" />
-        <activity android:name=".ProfileActivity" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="My profile" />
         <activity
             android:name=".SettingsActivity"
-            android:label="Settings"></activity>
-        <activity android:name=".TopWordsActivity"></activity>
+            android:label="Settings" />
+        <activity
+            android:name=".TopWordsActivity"
+            android:label="Top Words" />
     </application>
 
 </manifest>
