@@ -33,7 +33,6 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
 
     private FirebaseUser currentUser;
     private DatabaseReference dbWords;
-    private Boolean exists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +45,7 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
         btnAddWord = (Button) findViewById(R.id.btnAddWord);
         btnAddWord.setOnClickListener(this);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        dbWords = FirebaseDatabase.getInstance().getReference("words");
     }
 
     public void addWord() {
@@ -59,40 +59,30 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
         word.setDutch(dutch);
         word.setVotes(0);
 
-        dbWords = FirebaseDatabase.getInstance().getReference("words");
+        dbWords.child(french).setValue(word);
 
-        checkIfWordExists(french);
+        Toast.makeText(this, "Word has been added", Toast.LENGTH_SHORT).show();
 
-        if (exists) {
-            Toast.makeText(
-                    getApplicationContext(),
-                    "Word already exists",
-                    Toast.LENGTH_SHORT)
-                    .show();
-        } else {
-            dbWords.child(french).setValue(word);
-
-            Toast.makeText(this, "Word has been added", Toast.LENGTH_SHORT).show();
-
-            // TODO: add to child added on main activity?
-            if (allowNotifations()) {
-                sendNotification(word);
-            }
-
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+        // TODO: add to child added on main activity?
+        if (allowNotifations()) {
+            sendNotification(word);
         }
 
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
-    private void checkIfWordExists(String wordToCheck)
+    private void checkIfWordExists()
     {
-        dbWords.child(wordToCheck).limitToFirst(1).addListenerForSingleValueEvent(
+        String french = wFrench.getText().toString();
+        dbWords.child(french).limitToFirst(1).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            wordExists();
+                            Toast.makeText(getApplicationContext(), "Word already exists", Toast.LENGTH_SHORT).show();
+                        } else {
+                            addWord();
                         }
                     }
 
@@ -102,10 +92,6 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
         );
-    }
-
-    private void wordExists() {
-        exists = true;
     }
 
     private boolean allowNotifations() {
@@ -142,7 +128,7 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         if (view == btnAddWord) {
-            addWord();
+            checkIfWordExists();
         }
     }
 
