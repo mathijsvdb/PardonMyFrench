@@ -126,6 +126,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (view == btnRegister) {
             startActivity(new Intent(this, RegisterActivity.class));
+            finish();
         }
     }
 }

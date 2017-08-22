@@ -82,6 +82,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if (view == btnLogin) {
             startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
     }
 }

@@ -30,7 +30,11 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_logout:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(this, LoginActivity.class));
+                Intent logoutIntent = new Intent(this, LoginActivity.class);
+                // Make it so you can't push back button on login screen, app closes directly.
+                logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                logoutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(logoutIntent);
                 finish();
                 return true;
             case R.id.menu_settings:
