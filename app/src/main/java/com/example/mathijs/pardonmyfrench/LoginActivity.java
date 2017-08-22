@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText editPassword;
     private Button btnLogin;
     private Button btnRegister;
+    private ProgressBar pbLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -44,9 +45,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    // go to main activity
-                    finish();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         editPassword = (EditText) findViewById(R.id.editPassword);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnRegister = (Button) findViewById(R.id.btnRegister);
+        pbLogin = (ProgressBar) findViewById(R.id.pb_login);
 
         btnLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
@@ -78,10 +79,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void signIn(String email, String password) {
-        // TODO: validate email and password
+        // Form Validation
         if (!validateForm(email, password)) {
             return;
         }
+
+        // show progress
+        pbLogin.setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -89,27 +93,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            finish();
-                        } else {
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
                             Exception e = task.getException();
                             Log.w(TAG, "signInWithEmail:failed", e);
-                            Toast.makeText(LoginActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, e.getMessage().toString(),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
     private boolean validateForm(String email, String password) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "Email can not be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Emailaddress is required.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!email.matches(emailPattern)) {
+            Toast.makeText(this, "Emailaddress is not valid.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Password can not be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password cannot be empty", Toast.LENGTH_SHORT).show();
             return false;
         }
 

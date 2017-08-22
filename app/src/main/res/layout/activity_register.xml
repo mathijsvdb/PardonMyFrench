@@ -46,4 +46,12 @@
         android:text="Login"
         android:background="@android:color/transparent" />
 
+    <ProgressBar
+        android:id="@+id/pb_register"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
+
 </LinearLayout>
