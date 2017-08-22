@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,10 +12,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.mathijs.pardonmyfrench.Objects.Word;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView mFrench;
@@ -22,9 +30,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     private TextView mBy;
     private TextView mVotes;
     private Button btnVote;
-
     private Word mWord;
-
+    private List<String> mUsersVoted = new ArrayList<>();
     private FirebaseDatabase database;
 
     @Override
@@ -39,20 +46,45 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         mVotes = (TextView) findViewById(R.id.tv_votes);
         btnVote = (Button) findViewById(R.id.btnVote);
         btnVote.setOnClickListener(this);
+        final FirebaseAuth FBAuth = FirebaseAuth.getInstance();
 
+        // TODO: Eigenlijk niet meer nodig, kan vanop de databaseinteractie werken.
         Intent intent = getIntent();
         if (intent.hasExtra("word")) {
-            Word word = intent.getParcelableExtra("word");
+            mWord = intent.getParcelableExtra("word");
 
-            mFrench.setText(word.getFrench());
-            mDutch.setText(word.getDutch());
-            mBy.setText(word.getBy());
-            mVotes.setText(String.valueOf(word.getVotes()));
-
-            mWord = word;
+            mFrench.setText(mWord.getFrench());
+            mDutch.setText(mWord.getDutch());
+            mBy.setText(mWord.getBy());
+            mVotes.setText(String.valueOf(mWord.getVotes()));
         }
 
-        // TODO: voting + editbtn & activity;
+        // get the old usersVoted list
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference tblWords = database.getReference("words");
+        final String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        tblWords.child(mWord.getFrench()).addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child("usersVoted").getValue() != null) {
+                            GenericTypeIndicator<ArrayList<String>> a = new GenericTypeIndicator<ArrayList<String>>() {};
+                            mUsersVoted = dataSnapshot.child("usersVoted").getValue(a);
+
+                            if (mUsersVoted.contains(FBAuth.getCurrentUser().getUid())) {
+                                btnVote.setEnabled(false);
+                                btnVote.setText("You voted!");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
     }
 
     @Override
@@ -103,16 +135,25 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void upvoteWord() {
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference tblWords = database.getReference("words");
-
-        Word updated = mWord;
-        updated.setVotes(mWord.getVotes() + 1);
-        tblWords.child(mWord.getFrench()).setValue(updated);
-        mVotes.setText(String.valueOf(updated.getVotes()));
-
         // TODO: only allow 1 vote.
+        String Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (mUsersVoted.contains(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            Toast.makeText(this, "You've already voted for this word.", Toast.LENGTH_SHORT).show();
+        } else {
+            DatabaseReference tblWords = database.getReference("words");
 
-        Toast.makeText(this, "Thanks for voting", Toast.LENGTH_SHORT).show();
+            Word updated = mWord;
+            updated.setVotes(mWord.getVotes() + 1);
+            tblWords.child(mWord.getFrench()).setValue(updated);
+            mVotes.setText(String.valueOf(updated.getVotes()));
+
+            DatabaseReference tblWordsVotes = tblWords.child(updated.getFrench()).child("usersVoted");
+            mUsersVoted.add(Uid);
+            tblWordsVotes.setValue(mUsersVoted);
+            btnVote.setEnabled(false);
+            btnVote.setText("You voted!");
+
+            Toast.makeText(this, "Thanks for voting", Toast.LENGTH_SHORT).show();
+        }
     }
 }
