@@ -45,7 +45,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
                     finish();
                 } else {
                     // User is signed out
@@ -97,6 +98,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
+                            pbLogin.setVisibility(View.INVISIBLE);
                             Exception e = task.getException();
                             Log.w(TAG, "signInWithEmail:failed", e);
                             Toast.makeText(LoginActivity.this, e.getMessage().toString(),

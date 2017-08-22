@@ -42,7 +42,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("register_success", "Succesfully registered!");
+                    startActivity(intent);
                     finish();
                 } else {
                     // User is signed out
@@ -91,6 +93,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         if (!task.isSuccessful()) {
+                            pbRegister.setVisibility(View.INVISIBLE);
                             Exception e = task.getException();
                             Log.w(TAG, "createAccount:failed", e);
                             Toast.makeText(RegisterActivity.this, e.getMessage().toString(),

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
+
 import com.example.mathijs.pardonmyfrench.Objects.Word;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +27,12 @@ public class MainActivity extends BaseActivity implements WordAdapter.ListItemCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // check if registered.
+        Intent intentStarted = getIntent();
+        if (intentStarted.hasExtra("register_success")) {
+            Toast.makeText(this, intentStarted.getStringExtra("register_success"), Toast.LENGTH_SHORT).show();
+        }
 
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("words");
