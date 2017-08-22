@@ -45,8 +45,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     // go to main activity
+                    finish();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//                    finish();
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");

@@ -49,6 +49,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void createAccount(String email, String password) {
         // TODO: validate email and password
 
+        // Show Progress
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
