@@ -1,9 +1,16 @@
 package com.example.mathijs.pardonmyfrench;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.mathijs.pardonmyfrench.Objects.Word;
@@ -50,8 +57,13 @@ public class MainActivity extends BaseActivity implements WordAdapter.ListItemCl
         reference.orderByChild("french").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                wordList.add(dataSnapshot.getValue(Word.class));
+                Word word = dataSnapshot.getValue(Word.class);
+                wordList.add(word);
                 mAdapter.notifyDataSetChanged();
+
+                if (allowNotifations()) {
+                    sendNotification(word);
+                }
             }
 
             @Override
@@ -84,6 +96,37 @@ public class MainActivity extends BaseActivity implements WordAdapter.ListItemCl
                 //
             }
         });
+    }
+
+    private boolean allowNotifations() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        return prefs.getBoolean("allow_notifications", true);
+    }
+
+    private void sendNotification(Word word) {
+        Log.i("NOTIFICATION", "sendNotification: true");
+
+        // notification builder
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_add_black_24dp)
+                .setContentTitle("New word added")
+                .setContentText("The word '" + word.getFrench() + "' was added.");
+
+        Intent resultIntent = new Intent(this, DetailActivity.class);
+        resultIntent.putExtra("word", word);
+
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(1, mBuilder.build());
     }
 
     private int getItemIndex(Word word) {

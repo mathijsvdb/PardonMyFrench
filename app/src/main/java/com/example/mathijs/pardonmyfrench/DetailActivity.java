@@ -48,7 +48,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         btnVote.setOnClickListener(this);
         final FirebaseAuth FBAuth = FirebaseAuth.getInstance();
 
-        // TODO: Eigenlijk niet meer nodig, kan vanop de databaseinteractie werken.
         Intent intent = getIntent();
         if (intent.hasExtra("word")) {
             mWord = intent.getParcelableExtra("word");

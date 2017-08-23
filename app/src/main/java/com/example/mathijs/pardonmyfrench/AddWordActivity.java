@@ -63,9 +63,6 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
         Toast.makeText(this, "Word has been added", Toast.LENGTH_SHORT).show();
 
         // TODO: add to child added on main activity?
-        if (allowNotifations()) {
-            sendNotification(word);
-        }
 
         startActivity(new Intent(this, MainActivity.class));
         finish();
@@ -91,11 +88,6 @@ public class AddWordActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
         );
-    }
-
-    private boolean allowNotifations() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        return prefs.getBoolean("allow_notifications", true);
     }
 
     private void sendNotification(Word word) {
