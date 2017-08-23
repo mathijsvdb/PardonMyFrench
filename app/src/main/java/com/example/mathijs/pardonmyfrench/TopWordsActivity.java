@@ -48,7 +48,7 @@ public class TopWordsActivity extends AppCompatActivity implements WordAdapter.L
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 wordList.add(dataSnapshot.getValue(Word.class));
-                Collections.reverse(wordList);
+//                Collections.reverse(wordList);
                 mAdapter.notifyDataSetChanged();
             }
 
