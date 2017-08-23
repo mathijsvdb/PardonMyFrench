@@ -16,8 +16,7 @@
         <activity android:name=".MainActivity">
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:label="Login" >
+            android:name=".LoginActivity" >
             <!-- To not be able to return after login -->
             <!--android:finishOnTaskLaunch="true">-->
             <intent-filter>
